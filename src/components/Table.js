@@ -5,8 +5,6 @@ import { Button, ButtonGroup, Image, Stack, Text } from '@chakra-ui/react';
 function sortCardsByValue(card1, card2) {
     if (card1.value === 'ACE') {
         return 1
-    } else if (card2.value === 'ACE') {
-        return 1
     } else {
         return -1
     }
