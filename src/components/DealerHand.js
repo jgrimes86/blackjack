@@ -27,13 +27,25 @@ function DealerHand({
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
     }) : null;
 
-    // TODO: should dealer continue drawing if Ace is in dealer's opening hand?  Will need to check card values and re-calculate total value of dealer's hand
-
     // useEffect runs when player ends turn and when dealer draws cards
     useEffect(() => {
         if (!playerTurn && dealerCards) {
-            // if dealer has cards, draw new card if dealer total less than 17
-            if (dealerTotal < 17) {
+            if (playerTotal === 21) {
+                // If player has natural 21, check if dealer also has natural 21
+                if (dealerTotal === 21) {
+                    console.log("Draw")
+                } else {
+                    console.log("PLAYER WINS!")
+                }
+                setNewDeal(false)
+                return
+            } else if (dealerTotal === 21) {
+                // If dealer has natural 21 and player does not, dealer wins
+                console.log("Dealer Wins")
+                setNewDeal(false)
+                return
+            } else if (dealerTotal < 17) {
+                // otherwise, draw new card if dealer total less than 17
                 async function dealerDraw() {
                     const card = await dealCard(1)
                     if (card.success) {

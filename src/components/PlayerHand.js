@@ -6,6 +6,7 @@ function PlayerHand({
     setNewDeal,
     playerCards, 
     playerTotal,
+    setPlayerTurn,
     handleStartGame, 
     handleHit, 
     handleStand
@@ -27,8 +28,7 @@ function PlayerHand({
     useEffect(() => {
         if (playerCards && playerTotal) {
             if (playerTotal === 21) {
-                console.log("PLAYER WINS!")
-                setNewDeal(false)
+                setPlayerTurn(false)
             } else if (playerTotal > 21) {
                 console.log("PLAYER BUSTS!");
                 setNewDeal(false)

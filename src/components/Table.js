@@ -10,6 +10,11 @@ function Table() {
     const [newDeal, setNewDeal] = useState(false)
     const [playerCards, setPlayerCards] = useState([])
     const [playerTurn, setPlayerTurn] = useState(true)
+    const [playerSplit, setPlayerSplit] = useState({
+        split: false,
+        splitHand: 0,
+        hands: []
+    })
     const [dealerCards, setDealerCards] = useState([])
     const [dealersFirstCard, setDealersFirstCard] = useState('')
     const playerTotal = totalHandValue(playerCards)
@@ -59,7 +64,14 @@ function Table() {
 
     // end player turn
     const handleStand = () => {
-        setPlayerTurn(false)
+        if (playerSplit.split === false || playerSplit.splitHand === 1) {
+            setPlayerTurn(false)
+        } else {
+            setPlayerSplit({
+                ...playerSplit,
+                splitHand: 1
+            })
+        }
     }
   
     // useEffect runs when page loads to retreive new deck info
@@ -95,6 +107,7 @@ function Table() {
                 setNewDeal={setNewDeal}
                 playerCards={playerCards}
                 playerTotal={playerTotal}
+                setPlayerTurn={setPlayerTurn}
                 handleStartGame={handleStartGame}
                 handleHit={handleHit}
                 handleStand={handleStand}
