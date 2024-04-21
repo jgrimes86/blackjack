@@ -11,6 +11,7 @@ function Table() {
     const [playerCards, setPlayerCards] = useState([])
     const [playerTurn, setPlayerTurn] = useState(true)
     const [dealerCards, setDealerCards] = useState([])
+    const [dealersFirstCard, setDealersFirstCard] = useState('')
     const playerTotal = totalHandValue(playerCards)
     const dealerTotal = totalHandValue(dealerCards)
 
@@ -79,12 +80,15 @@ function Table() {
                 setNewDeal={setNewDeal}
                 dealerCards={dealerCards}
                 setDealerCards={setDealerCards}
+                setDealersFirstCard={setDealersFirstCard}
                 playerTurn={playerTurn}
                 dealCard={dealCard}
                 dealerTotal={dealerTotal}
                 playerTotal={playerTotal}
             />
-            <Text>Dealer card value: {dealerTotal}</Text>
+            <Text>
+                {(playerTurn && dealersFirstCard) ? dealersFirstCard: `Dealer card value: ${dealerTotal}`}
+            </Text>
             <Text>Player Hand</Text>
             <PlayerHand 
                 newDeal={newDeal}

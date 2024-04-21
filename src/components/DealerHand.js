@@ -5,6 +5,7 @@ function DealerHand({
     setNewDeal,
     dealerCards, 
     setDealerCards,
+    setDealersFirstCard,
     playerTurn,
     dealCard,
     dealerTotal,
@@ -16,6 +17,7 @@ function DealerHand({
             if (index === 1) {
                 return <Image key={index} src={'https://www.deckofcardsapi.com/static/img/back.png'} alt='Image of back of card' boxSize='200px'/>
             } else {
+                setDealersFirstCard(`Dealer is showing ${card.value} of ${card.suit}`)
                 return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
             }
         })
@@ -25,7 +27,7 @@ function DealerHand({
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
     }) : null;
 
-    const dealerHand = playerTurn ? dealerHandHidden : dealerHandVisible;
+    // TODO: should dealer continue drawing if Ace is in dealer's opening hand?  Will need to check card values and re-calculate total value of dealer's hand
 
     // useEffect runs when player ends turn and when dealer draws cards
     useEffect(() => {
