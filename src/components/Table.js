@@ -20,20 +20,32 @@ function Table() {
         .then(resp => resp.json())
     };
 
+    const firstDeal = async () => {
+        const firstPlayerCard = await dealCard(1)
+        if (firstPlayerCard.success) {
+            setPlayerCards([firstPlayerCard.cards[0]])
+        }
+        const firstDealerCard = await dealCard(1)
+        if (firstDealerCard.success) {
+            setDealerCards([firstDealerCard.cards[0]])
+        }
+        const secondPlayerCard = await dealCard(1)
+        if (secondPlayerCard.success) {
+            setPlayerCards(currCards => [...currCards, secondPlayerCard.cards[0]])
+        }
+        const secondDealerCard = await dealCard(1)
+        if (secondDealerCard.success) {
+            setDealerCards(currCards => [...currCards, secondDealerCard.cards[0]])
+        }
+    }
+
     // start a new hand by drawing two cards for the player
     const handleStartGame = async () => {
         setPlayerCards(() => [])
         setPlayerTurn(true)
         setDealerCards(() => [])
         setNewDeal(true)
-        const firstCard = await dealCard(1)
-        if (firstCard.success) {
-            setPlayerCards([firstCard.cards[0]])
-        }
-        const secondCard = await dealCard(1)
-        if (secondCard.success) {
-            setPlayerCards(currCards => [...currCards, secondCard.cards[0]])
-        }
+        firstDeal()
     };
 
     // deal player one more card

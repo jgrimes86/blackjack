@@ -17,7 +17,7 @@ function PlayerHand({
 
     // buttons shown for player interaction
     const playerButtons = !newDeal
-    ? <Button onClick={handleStartGame}>Place Bet</Button>
+    ? <Button onClick={handleStartGame}>Start Deal</Button>
     : <ButtonGroup>
         <Button onClick={handleHit}>Hit</Button>
         <Button onClick={handleStand}>Stand</Button>

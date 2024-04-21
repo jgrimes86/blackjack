@@ -11,22 +11,25 @@ function DealerHand({
     playerTotal,
 }) {
 
-    const dealerHand = dealerCards ? dealerCards.map((card, index) => {
+    const dealerHandHidden = dealerCards
+        ? dealerCards.map((card, index) => {
+            if (index === 1) {
+                return <Image key={index} src={'https://www.deckofcardsapi.com/static/img/back.png'} alt='Image of back of card' boxSize='200px'/>
+            } else {
+                return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
+            }
+        })
+        : null;
+
+    const dealerHandVisible = dealerCards ? dealerCards.map((card, index) => {
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
     }) : null;
 
+    const dealerHand = playerTurn ? dealerHandHidden : dealerHandVisible;
+
     // useEffect runs when player ends turn and when dealer draws cards
     useEffect(() => {
-        if (!playerTurn && !dealerCards) {
-            // if dealer has no cards yet, get two cards
-            async function dealerFirstTurn() {
-                const cards = await dealCard(2)
-                if (cards.success) {
-                    setDealerCards(cards.cards)
-                }
-            }
-            dealerFirstTurn()
-        } else if (!playerTurn && dealerCards) {
+        if (!playerTurn && dealerCards) {
             // if dealer has cards, draw new card if dealer total less than 17
             if (dealerTotal < 17) {
                 async function dealerDraw() {
@@ -51,7 +54,7 @@ function DealerHand({
 
     return (
         <Stack direction='row' name='player hand'>
-                {dealerHand}
+            {playerTurn ? dealerHandHidden : dealerHandVisible}
         </Stack>
     )
 }
