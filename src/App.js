@@ -1,10 +1,13 @@
 import './App.css';
+import { ContextProvider } from './context/BlackJackContext';
 import Table from './components/Table';
 
 function App() {
   return (
     <div className="App">
-      <Table />
+      <ContextProvider>
+        <Table />
+      </ContextProvider>
     </div>
   );
 }

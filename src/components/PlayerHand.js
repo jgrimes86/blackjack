@@ -1,16 +1,13 @@
-import { useEffect } from 'react';
 import { Button, ButtonGroup, Image, Stack } from '@chakra-ui/react';
 
+import { BlackJackContext } from '../context/BlackJackContext';
+
 function PlayerHand({
-    newDeal, 
-    setNewDeal,
-    playerCards, 
-    playerTotal,
-    setPlayerTurn,
     handleStartGame, 
     handleHit, 
     handleStand
 }) {
+    const { newDeal, playerCards } = BlackJackContext()
 
     const playerHand = playerCards ? playerCards.map((card, index) => {
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
@@ -23,18 +20,6 @@ function PlayerHand({
         <Button onClick={handleHit}>Hit</Button>
         <Button onClick={handleStand}>Stand</Button>
     </ButtonGroup>
-
-    // useEffect runs when player gets new card
-    useEffect(() => {
-        if (playerCards && playerTotal) {
-            if (playerTotal === 21) {
-                setPlayerTurn(false)
-            } else if (playerTotal > 21) {
-                console.log("PLAYER BUSTS!");
-                setNewDeal(false)
-            }
-        }
-    }, [playerCards])
 
     return (
         <div>

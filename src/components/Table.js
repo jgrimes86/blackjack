@@ -1,30 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Text } from '@chakra-ui/react';
 
 import DealerHand from "./DealerHand";
 import PlayerHand from "./PlayerHand";
-import { totalHandValue } from "../tools/handValue";
+import { BlackJackContext } from "../context/BlackJackContext";
 
 function Table() {
-    const [deck, setDeck] = useState({deck_id: "", remaining: 0})
-    const [newDeal, setNewDeal] = useState(false)
-    const [playerCards, setPlayerCards] = useState([])
-    const [playerTurn, setPlayerTurn] = useState(true)
-    const [playerSplit, setPlayerSplit] = useState({
-        split: false,
-        splitHand: 0,
-        hands: []
-    })
-    const [dealerCards, setDealerCards] = useState([])
-    const [dealersFirstCard, setDealersFirstCard] = useState('')
-    const playerTotal = totalHandValue(playerCards)
-    const dealerTotal = totalHandValue(dealerCards)
-
-    // get cards from Deck of Cards API
-    const dealCard = async (draw) => {
-        return fetch(`https://www.deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=${draw}`)
-        .then(resp => resp.json())
-    };
+    const {
+        setDeck, 
+        setNewDeal, 
+        setPlayerCards, 
+        playerTurn, 
+        setPlayerTurn, 
+        playerSplit, 
+        setPlayerSplit, 
+        setDealerCards, 
+        dealersFirstCard, 
+        playerTotal, 
+        dealerTotal,
+        dealCard
+    } = BlackJackContext();
 
     const firstDeal = async () => {
         const firstPlayerCard = await dealCard(1)
@@ -89,25 +84,13 @@ function Table() {
         <div>
             <Text>Dealer Hand</Text>
             <DealerHand 
-                setNewDeal={setNewDeal}
-                dealerCards={dealerCards}
-                setDealerCards={setDealerCards}
-                setDealersFirstCard={setDealersFirstCard}
-                playerTurn={playerTurn}
                 dealCard={dealCard}
-                dealerTotal={dealerTotal}
-                playerTotal={playerTotal}
             />
             <Text>
                 {(playerTurn && dealersFirstCard) ? dealersFirstCard: `Dealer card value: ${dealerTotal}`}
             </Text>
             <Text>Player Hand</Text>
             <PlayerHand 
-                newDeal={newDeal}
-                setNewDeal={setNewDeal}
-                playerCards={playerCards}
-                playerTotal={playerTotal}
-                setPlayerTurn={setPlayerTurn}
                 handleStartGame={handleStartGame}
                 handleHit={handleHit}
                 handleStand={handleStand}
