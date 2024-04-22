@@ -1,17 +1,44 @@
-import { Button, ButtonGroup, Image, Stack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Image, Stack, Text } from '@chakra-ui/react';
 
 import { BlackJackContext } from '../context/BlackJackContext';
 
 function PlayerHand({
     handleStartGame, 
-    handleHit, 
-    handleStand
 }) {
-    const { newDeal, playerCards } = BlackJackContext()
+    const { dealCard, newDeal, playerCards, setPlayerCards, setPlayerTurn, playerSplit, setPlayerSplit, canPlayerSplit, setCanPlayerSplit, playerTotal } = BlackJackContext()
 
     const playerHand = playerCards ? playerCards.map((card, index) => {
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
     }) : null;
+
+    // deal player one more card
+    const handleHit = async () => {
+        const newCard = await dealCard(1)
+        if (newCard.success) {
+            setPlayerCards(currCards => [...currCards, newCard.cards[0]])
+        }
+    }
+
+    // end player turn
+    const handleStand = () => {
+        if (playerSplit.split === false || playerSplit.splitHand === 1) {
+            setPlayerTurn(false)
+        } else {
+            setPlayerSplit({
+                ...playerSplit,
+                splitHand: 1
+            })
+        }
+    }
+
+    const handleSplit = () => {
+        setPlayerSplit({
+            ...playerSplit,
+            split: true,
+            hands: [[playerCards[0]], [playerCards[1]]]
+        })
+        setCanPlayerSplit(false)
+    }
 
     // buttons shown for player interaction
     const playerButtons = !newDeal
@@ -19,6 +46,7 @@ function PlayerHand({
     : <ButtonGroup>
         <Button onClick={handleHit}>Hit</Button>
         <Button onClick={handleStand}>Stand</Button>
+        <Button onClick={handleSplit} isDisabled={!canPlayerSplit}>Split</Button>
     </ButtonGroup>
 
     return (
@@ -27,6 +55,7 @@ function PlayerHand({
                 {playerHand}
             </Stack>
             {playerButtons}
+            <Text>Player card value: {playerTotal}</Text>
         </div>
     )
 }

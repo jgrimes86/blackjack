@@ -6,5 +6,8 @@
 TODO:
 
 - Player Split Hand
-- Dealer has Ace in opening hand - If the dealer has an ace, and counting it as 11 would bring the total to 17 or more (but not over 21), the dealer must count the ace as 11 and stand.
 - Insurance?
+
+- correct dealer behavior when player hits 21 but not a natural 21 (as of now, dealer does not draw cards if under 17. acting like player has natural 21)
+
+- Score board

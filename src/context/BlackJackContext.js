@@ -4,10 +4,34 @@ import { totalHandValue } from "../tools/handValue";
 
 const Context = createContext();
 
+const splitTestCards = [
+    {
+        "code": "9S",
+        "image": "https://deckofcardsapi.com/static/img/9S.png",
+        "images": {
+            "svg": "https://deckofcardsapi.com/static/img/9S.svg",
+            "png": "https://deckofcardsapi.com/static/img/9S.png"
+        },
+        "value": "9",
+        "suit": "SPADES"
+    },
+    {
+        "code": "9S",
+        "image": "https://deckofcardsapi.com/static/img/9S.png",
+        "images": {
+            "svg": "https://deckofcardsapi.com/static/img/9S.svg",
+            "png": "https://deckofcardsapi.com/static/img/9S.png"
+        },
+        "value": "9",
+        "suit": "SPADES"
+    }
+]
+
+
 export const ContextProvider = ({ children }) => {
     const [deck, setDeck] = useState({deck_id: "", remaining: 0})
     const [newDeal, setNewDeal] = useState(false)
-    const [playerCards, setPlayerCards] = useState([])
+    const [playerCards, setPlayerCards] = useState(splitTestCards)
     const [playerTurn, setPlayerTurn] = useState(true)
     const [playerSplit, setPlayerSplit] = useState({
         split: false,
@@ -16,13 +40,14 @@ export const ContextProvider = ({ children }) => {
     })
     const [dealerCards, setDealerCards] = useState([])
     const [dealersFirstCard, setDealersFirstCard] = useState('')
+    const [canPlayerSplit, setCanPlayerSplit] = useState(false)
 
     const playerTotal = totalHandValue(playerCards)
     const dealerTotal = totalHandValue(dealerCards)
 
     // useEffect runs when player gets new card
     useEffect(() => {
-        if (playerCards && playerTotal) {
+        if (playerCards && playerTotal && playerSplit.split === false) {
             if (playerTotal === 21) {
                 setPlayerTurn(false)
             } else if (playerTotal > 21) {
@@ -30,7 +55,21 @@ export const ContextProvider = ({ children }) => {
                 setNewDeal(false)
             }
         }
+
+        if (playerCards) {
+            if (playerCards.length === 2 && !playerSplit.split) {
+                const card1 = playerCards[0]
+                const card2 = playerCards[1]
+                if (card1.value === card2.value) {
+                    setCanPlayerSplit(true)
+                }
+            } else {
+                setCanPlayerSplit(false)
+            }
+        }
     }, [playerCards])
+
+    console.log(playerSplit)
 
     // useEffect runs when player ends turn and when dealer draws cards
     useEffect(() => {
@@ -93,7 +132,9 @@ export const ContextProvider = ({ children }) => {
         setDealersFirstCard,
         playerTotal,
         dealerTotal,
-        dealCard
+        dealCard,
+        canPlayerSplit,
+        setCanPlayerSplit,
     }
 
     return (
