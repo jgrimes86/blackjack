@@ -2,19 +2,16 @@ import { useEffect } from 'react';
 import { Button, ButtonGroup, Image, Stack, Text } from '@chakra-ui/react';
 
 import { BlackJackContext } from '../context/BlackJackContext';
-import { totalHandValue } from '../tools/handValue';
 
 function PlayerSplitHand({
     hand,
     index
 }) {
-    const { newDeal, setNewDeal, playerCards, playerTurn, setPlayerTurn, splitHand, setSplitHand, canPlayerSplit, setCanPlayerSplit, playerTotal, dealCard } = BlackJackContext()
+    const { newDeal, setNewDeal, playerCards, playerTurn, setPlayerTurn, splitHand, setSplitHand, canPlayerSplit, setCanPlayerSplit, playerTotal, splitHandTotals, dealCard } = BlackJackContext()
 
     const cards = hand ? hand.map((card, index) => {
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
     }) : null;
-
-    const handValue = totalHandValue(hand);
     
     const activeHand = (splitHand.splitHand === index && playerTurn) ? false : true;
     
@@ -29,7 +26,7 @@ function PlayerSplitHand({
         if (splitHand.splitHand === 0 && index === 0) {
             setSplitHand({...splitHand, splitHand: 1})
         } else if (splitHand.splitHand === 1 && index === 1){
-            setNewDeal(false)
+            // setNewDeal(false)
             setPlayerTurn(false)
         }
     }
@@ -50,12 +47,12 @@ function PlayerSplitHand({
 
     // runs when player gets new card; checks value of player's split hand
     useEffect(() => {
-        if (splitHand.splitHand === index && handValue) {
-            if (handValue >= 21) {
+        if (splitHand.splitHand === index && splitHandTotals[index]) {
+            if (splitHandTotals[index] >= 21) {
                 if (splitHand.splitHand === 0 && index === 0) {
                     setSplitHand({...splitHand, splitHand: 1})
                 } else if (splitHand.splitHand === 1 && index === 1){
-                    setNewDeal(false)
+                    // setNewDeal(false)
                     setPlayerTurn(false)
                 }
             }
@@ -68,7 +65,7 @@ function PlayerSplitHand({
             <Stack direction='row' name={`split hand ${index}`}>
                 {cards}
             </Stack>
-            <Text>Hand total: {handValue}</Text>
+            <Text>Hand total: {splitHandTotals[index]}</Text>
             <ButtonGroup isDisabled={activeHand}>
                 <Button onClick={handleHit}>Hit</Button>
                 <Button onClick={handleStand}>Stand</Button>

@@ -48,6 +48,7 @@ function PlayerHand({
                 setPlayerTurn(false)
             } else if (playerTotal > 21) {
                 console.log("PLAYER BUSTS!");
+                setPlayerTurn(false)
                 setNewDeal(false)
             }
         }

@@ -31,7 +31,7 @@ const splitTestCards = [
 export const ContextProvider = ({ children }) => {
     const [deck, setDeck] = useState({deck_id: "", remaining: 0})
     const [newDeal, setNewDeal] = useState(false)
-    const [playerCards, setPlayerCards] = useState(splitTestCards)
+    const [playerCards, setPlayerCards] = useState([])
     const [playerTurn, setPlayerTurn] = useState(true)
     const [splitHand, setSplitHand] = useState({
         split: false,
@@ -43,6 +43,7 @@ export const ContextProvider = ({ children }) => {
     const [canPlayerSplit, setCanPlayerSplit] = useState(false)
 
     const playerTotal = totalHandValue(playerCards)
+    const splitHandTotals = [totalHandValue(splitHand.hands[0]), totalHandValue(splitHand.hands[1])]
     const dealerTotal = totalHandValue(dealerCards)
 
     const dealCard = async (draw) => {
@@ -66,6 +67,7 @@ export const ContextProvider = ({ children }) => {
         dealersFirstCard,
         setDealersFirstCard,
         playerTotal,
+        splitHandTotals,
         dealerTotal,
         dealCard,
         canPlayerSplit,
