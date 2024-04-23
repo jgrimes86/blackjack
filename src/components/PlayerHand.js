@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Button, ButtonGroup, Image, Stack, Text } from '@chakra-ui/react';
 
 import { BlackJackContext } from '../context/BlackJackContext';
@@ -5,7 +6,7 @@ import { BlackJackContext } from '../context/BlackJackContext';
 function PlayerHand({
     handleStartGame, 
 }) {
-    const { dealCard, newDeal, playerCards, setPlayerCards, setPlayerTurn, playerSplit, setPlayerSplit, canPlayerSplit, setCanPlayerSplit, playerTotal } = BlackJackContext()
+    const { dealCard, newDeal, setNewDeal, playerCards, setPlayerCards, setPlayerTurn, playerSplit, setPlayerSplit, canPlayerSplit, setCanPlayerSplit, playerTotal } = BlackJackContext()
 
     const playerHand = playerCards ? playerCards.map((card, index) => {
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
@@ -39,6 +40,30 @@ function PlayerHand({
         })
         setCanPlayerSplit(false)
     }
+
+    // useEffect runs when player gets new card
+    useEffect(() => {
+        if (playerCards && playerTotal && playerSplit.split === false) {
+            if (playerTotal === 21) {
+                setPlayerTurn(false)
+            } else if (playerTotal > 21) {
+                console.log("PLAYER BUSTS!");
+                setNewDeal(false)
+            }
+        }
+
+        if (playerCards) {
+            if (playerCards.length === 2 && !playerSplit.split) {
+                const card1 = playerCards[0]
+                const card2 = playerCards[1]
+                if (card1.value === card2.value) {
+                    setCanPlayerSplit(true)
+                }
+            } else {
+                setCanPlayerSplit(false)
+            }
+        }
+    }, [playerCards])
 
     // buttons shown for player interaction
     const playerButtons = !newDeal
