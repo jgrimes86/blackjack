@@ -81,7 +81,7 @@ function Table() {
                 dealCard={dealCard}
             />
             <Text>
-                {(playerTurn && dealersFirstCard) ? dealersFirstCard: `Dealer card value: ${dealerTotal}`}
+                {(playerTurn) ? dealersFirstCard: `Dealer card value: ${dealerTotal}`}
             </Text>
             <Text>Player Hand</Text>
             {playerArea}

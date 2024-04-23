@@ -11,7 +11,6 @@ function DealerHand() {
             if (index === 1) {
                 return <Image key={index} src={'https://www.deckofcardsapi.com/static/img/back.png'} alt='Image of back of card' boxSize='200px'/>
             } else {
-                setDealersFirstCard(`Dealer is showing ${card.value} of ${card.suit}`)
                 return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
             }
         })
@@ -27,6 +26,13 @@ function DealerHand() {
             setDealerCards(currCards => [...currCards, card.cards[0]])
         }
     }
+
+    useEffect(() => {
+        if (dealerCards.length > 1) {
+            const dealerSecondCard = dealerCards[1]
+            setDealersFirstCard(`Dealer is showing ${dealerSecondCard.value} of ${dealerSecondCard.suit}`)
+        }
+    }, [dealerCards])
 
     // useEffect runs when player ends turn and when dealer draws cards
     useEffect(() => {
@@ -58,7 +64,9 @@ function DealerHand() {
                             console.log("Dealer Wins")
                         } else if (dealerTotal === playerTotal) {
                             console.log("Draw")
-                    }
+                        } else {
+                            console.log("PLAYER WINS!")
+                        }
                     } else {
                         if (playerTotal <= 21) {
                             console.log("PLAYER WINS!")
