@@ -31,9 +31,9 @@ const splitTestCards = [
 export const ContextProvider = ({ children }) => {
     const [deck, setDeck] = useState({deck_id: "", remaining: 0})
     const [newDeal, setNewDeal] = useState(false)
-    const [playerCards, setPlayerCards] = useState([])
+    const [playerCards, setPlayerCards] = useState(splitTestCards)
     const [playerTurn, setPlayerTurn] = useState(true)
-    const [playerSplit, setPlayerSplit] = useState({
+    const [splitHand, setSplitHand] = useState({
         split: false,
         splitHand: 0,
         hands: []
@@ -59,8 +59,8 @@ export const ContextProvider = ({ children }) => {
         setPlayerCards,
         playerTurn,
         setPlayerTurn,
-        playerSplit,
-        setPlayerSplit,
+        splitHand,
+        setSplitHand,
         dealerCards,
         setDealerCards,
         dealersFirstCard,

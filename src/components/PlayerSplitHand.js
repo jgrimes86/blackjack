@@ -8,27 +8,27 @@ function PlayerSplitHand({
     hand,
     index
 }) {
-    const { newDeal, setNewDeal, playerCards, playerTurn, setPlayerTurn, playerSplit, setPlayerSplit, canPlayerSplit, setCanPlayerSplit, playerTotal, dealCard } = BlackJackContext()
+    const { newDeal, setNewDeal, playerCards, playerTurn, setPlayerTurn, splitHand, setSplitHand, canPlayerSplit, setCanPlayerSplit, playerTotal, dealCard } = BlackJackContext()
 
-    const splitHand = hand ? hand.map((card, index) => {
+    const cards = hand ? hand.map((card, index) => {
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
     }) : null;
 
     const handValue = totalHandValue(hand);
     
-    const activeHand = (playerSplit.splitHand === index && playerTurn) ? false : true;
+    const activeHand = (splitHand.splitHand === index && playerTurn) ? false : true;
     
     const handleHit = async () => {
         const newCard = await dealCard(1)
         if (newCard.success) {
-            playerSplit.hands[index].push(newCard.cards[0])
-            setPlayerSplit({...playerSplit})        }
+            splitHand.hands[index].push(newCard.cards[0])
+            setSplitHand({...splitHand})        }
     }
 
     const handleStand = () => {
-        if (playerSplit.splitHand === 0 && index === 0) {
-            setPlayerSplit({...playerSplit, splitHand: 1})
-        } else if (playerSplit.splitHand === 1 && index === 1){
+        if (splitHand.splitHand === 0 && index === 0) {
+            setSplitHand({...splitHand, splitHand: 1})
+        } else if (splitHand.splitHand === 1 && index === 1){
             setNewDeal(false)
             setPlayerTurn(false)
         }
@@ -40,8 +40,8 @@ function PlayerSplitHand({
             const createSplitHand = async () => {
                 const newCard = await dealCard(1)
                 if (newCard.success) {
-                    playerSplit.hands[index].push(newCard.cards[0])
-                    setPlayerSplit({...playerSplit})
+                    splitHand.hands[index].push(newCard.cards[0])
+                    setSplitHand({...splitHand})
                 }
             }
             createSplitHand();
@@ -50,23 +50,23 @@ function PlayerSplitHand({
 
     // runs when player gets new card; checks value of player's split hand
     useEffect(() => {
-        if (playerSplit.splitHand === index && handValue) {
+        if (splitHand.splitHand === index && handValue) {
             if (handValue >= 21) {
-                if (playerSplit.splitHand === 0 && index === 0) {
-                    setPlayerSplit({...playerSplit, splitHand: 1})
-                } else if (playerSplit.splitHand === 1 && index === 1){
+                if (splitHand.splitHand === 0 && index === 0) {
+                    setSplitHand({...splitHand, splitHand: 1})
+                } else if (splitHand.splitHand === 1 && index === 1){
                     setNewDeal(false)
                     setPlayerTurn(false)
                 }
             }
         }
 
-    }, [playerSplit])
+    }, [splitHand])
 
     return (
         <div>
             <Stack direction='row' name={`split hand ${index}`}>
-                {splitHand}
+                {cards}
             </Stack>
             <Text>Hand total: {handValue}</Text>
             <ButtonGroup isDisabled={activeHand}>

@@ -5,15 +5,15 @@ import { BlackJackContext } from "../context/BlackJackContext";
 import PlayerSplitHand from "./PlayerSplitHand";
 
 function SplitHands() {
-    const { playerSplit } = BlackJackContext();
+    const { splitHand } = BlackJackContext();
 
-    const splitHands = playerSplit.hands ? playerSplit.hands.map((hand, index) => {
+    const twoHands = splitHand.hands ? splitHand.hands.map((hand, index) => {
         return <PlayerSplitHand key={index} hand={hand} index={index} />
     }) : null;
 
     return (
         <Box>
-            {splitHands}
+            {twoHands}
         </Box>
     )
 }

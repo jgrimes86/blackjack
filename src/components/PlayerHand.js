@@ -6,7 +6,7 @@ import { BlackJackContext } from '../context/BlackJackContext';
 function PlayerHand({
     handleStartGame, 
 }) {
-    const { dealCard, newDeal, setNewDeal, playerCards, setPlayerCards, setPlayerTurn, playerSplit, setPlayerSplit, canPlayerSplit, setCanPlayerSplit, playerTotal } = BlackJackContext()
+    const { dealCard, newDeal, setNewDeal, playerCards, setPlayerCards, setPlayerTurn, splitHand, setSplitHand, canPlayerSplit, setCanPlayerSplit, playerTotal } = BlackJackContext()
 
     const playerHand = playerCards ? playerCards.map((card, index) => {
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
@@ -22,19 +22,19 @@ function PlayerHand({
 
     // end player turn
     const handleStand = () => {
-        if (playerSplit.split === false || playerSplit.splitHand === 1) {
+        if (splitHand.split === false || splitHand.splitHand === 1) {
             setPlayerTurn(false)
         } else {
-            setPlayerSplit({
-                ...playerSplit,
+            setSplitHand({
+                ...splitHand,
                 splitHand: 1
             })
         }
     }
 
     const handleSplit = () => {
-        setPlayerSplit({
-            ...playerSplit,
+        setSplitHand({
+            ...splitHand,
             split: true,
             hands: [[playerCards[0]], [playerCards[1]]]
         })
@@ -43,7 +43,7 @@ function PlayerHand({
 
     // useEffect runs when player gets new card
     useEffect(() => {
-        if (playerCards && playerTotal && playerSplit.split === false) {
+        if (playerCards && playerTotal && splitHand.split === false) {
             if (playerTotal === 21) {
                 setPlayerTurn(false)
             } else if (playerTotal > 21) {
@@ -53,7 +53,7 @@ function PlayerHand({
         }
 
         if (playerCards) {
-            if (playerCards.length === 2 && !playerSplit.split) {
+            if (playerCards.length === 2 && !splitHand.split) {
                 const card1 = playerCards[0]
                 const card2 = playerCards[1]
                 if (card1.value === card2.value) {

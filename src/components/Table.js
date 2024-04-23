@@ -14,8 +14,8 @@ function Table() {
         setPlayerCards, 
         playerTurn, 
         setPlayerTurn, 
-        playerSplit, 
-        setPlayerSplit, 
+        splitHand, 
+        setSplitHand, 
         setDealerCards, 
         dealersFirstCard, 
         playerTotal, 
@@ -24,18 +24,18 @@ function Table() {
     } = BlackJackContext();
 
     const firstDeal = async () => {
-        const firstPlayerCard = await dealCard(1)
-        if (firstPlayerCard.success) {
-            setPlayerCards([firstPlayerCard.cards[0]])
-        }
+        // const firstPlayerCard = await dealCard(1)
+        // if (firstPlayerCard.success) {
+        //     setPlayerCards([firstPlayerCard.cards[0]])
+        // }
         const firstDealerCard = await dealCard(1)
         if (firstDealerCard.success) {
             setDealerCards([firstDealerCard.cards[0]])
         }
-        const secondPlayerCard = await dealCard(1)
-        if (secondPlayerCard.success) {
-            setPlayerCards(currCards => [...currCards, secondPlayerCard.cards[0]])
-        }
+        // const secondPlayerCard = await dealCard(1)
+        // if (secondPlayerCard.success) {
+        //     setPlayerCards(currCards => [...currCards, secondPlayerCard.cards[0]])
+        // }
         const secondDealerCard = await dealCard(1)
         if (secondDealerCard.success) {
             setDealerCards(currCards => [...currCards, secondDealerCard.cards[0]])
@@ -62,7 +62,7 @@ function Table() {
         })
     }, [])
 
-    const playerArea = !playerSplit.split
+    const playerArea = !splitHand.split
         ? <PlayerHand handleStartGame={handleStartGame} />
         : <SplitHands />;
 
