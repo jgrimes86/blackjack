@@ -18,3 +18,5 @@ TODO:
     - if split hand, dealer draws and compares against both hands?
 
 - Score board
+
+- Way to keep track of card count & re-shuffle deck when remaining cards hits a certain limit

@@ -3,9 +3,7 @@ import { Button, ButtonGroup, Image, Stack, Text } from '@chakra-ui/react';
 
 import { BlackJackContext } from '../context/BlackJackContext';
 
-function PlayerHand({
-    handleStartGame, 
-}) {
+function PlayerHand() {
     const { dealCard, newDeal, setNewDeal, playerCards, setPlayerCards, setPlayerTurn, splitHand, setSplitHand, canPlayerSplit, setCanPlayerSplit, playerTotal } = BlackJackContext()
 
     const playerHand = playerCards ? playerCards.map((card, index) => {
@@ -67,13 +65,13 @@ function PlayerHand({
     }, [playerCards])
 
     // buttons shown for player interaction
-    const playerButtons = !newDeal
-    ? <Button onClick={handleStartGame}>Start Deal</Button>
-    : <ButtonGroup>
+    const playerButtons = newDeal
+    ? <ButtonGroup>
         <Button onClick={handleHit}>Hit</Button>
         <Button onClick={handleStand}>Stand</Button>
         <Button onClick={handleSplit} isDisabled={!canPlayerSplit}>Split</Button>
     </ButtonGroup>
+    : null;
 
     return (
         <div>

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Stack, Text } from '@chakra-ui/react';
 
 import DealerHand from "./DealerHand";
 import PlayerHand from "./PlayerHand";
@@ -10,6 +10,7 @@ import { BlackJackContext } from "../context/BlackJackContext";
 function Table() {
     const {
         setDeck, 
+        newDeal,
         setNewDeal, 
         setPlayerCards, 
         playerTurn, 
@@ -44,13 +45,23 @@ function Table() {
 
     // start a new hand by drawing two cards for the player
     const handleStartGame = async () => {
-        // setPlayerCards(() => [])
+        setSplitHand({
+            ...splitHand,
+            split: false
+        })
+        setPlayerCards(() => [])
         setPlayerTurn(true)
         setDealerCards(() => [])
         setNewDeal(true)
         firstDeal()
     };
   
+    const playerArea = !splitHand.split
+        ? <PlayerHand handleStartGame={handleStartGame} />
+        : <SplitHands />;
+    
+    const startButtonStatus = newDeal ? true : false;
+
     // useEffect runs when page loads to retreive new deck info
     useEffect(() => {
         fetch('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=4')
@@ -62,9 +73,6 @@ function Table() {
         })
     }, [])
 
-    const playerArea = !splitHand.split
-        ? <PlayerHand handleStartGame={handleStartGame} />
-        : <SplitHands />;
 
     return (
         <div>
@@ -77,6 +85,7 @@ function Table() {
             </Text>
             <Text>Player Hand</Text>
             {playerArea}
+            <Button onClick={handleStartGame} isDisabled={startButtonStatus} >Start Deal</Button>
         </div>
     )
 }
