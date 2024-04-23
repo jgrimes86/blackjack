@@ -1,10 +1,10 @@
-import { Box } from "@chakra-ui/react"
+import { useEffect } from "react";
+import { Box } from "@chakra-ui/react";
 
-import { BlackJackContext } from "../context/BlackJackContext"
+import { BlackJackContext } from "../context/BlackJackContext";
 import PlayerSplitHand from "./PlayerSplitHand";
 
 function SplitHands() {
-
     const { playerSplit } = BlackJackContext();
 
     const splitHands = playerSplit.hands ? playerSplit.hands.map((hand, index) => {

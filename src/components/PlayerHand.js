@@ -54,8 +54,8 @@ function PlayerHand({
             <Stack direction='row' name='player hand'>
                 {playerHand}
             </Stack>
-            {playerButtons}
             <Text>Player card value: {playerTotal}</Text>
+            {playerButtons}
         </div>
     )
 }
