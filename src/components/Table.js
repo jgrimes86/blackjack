@@ -3,6 +3,7 @@ import { Box, Button, Stack, Text } from '@chakra-ui/react';
 
 import DealerHand from "./DealerHand";
 import PlayerHand from "./PlayerHand";
+import Scoreboard from "./Scoreboard";
 import SplitHands from "./SplitHands";
 import { BlackJackContext } from "../context/BlackJackContext";
 
@@ -95,6 +96,7 @@ function Table() {
     return (
         <div>
             <Text>Blackjack</Text>
+            <Scoreboard />
             <Text>Dealer Hand</Text>
             <DealerHand 
                 dealCard={dealCard}

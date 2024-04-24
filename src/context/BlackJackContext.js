@@ -41,6 +41,11 @@ export const ContextProvider = ({ children }) => {
     const [dealerCards, setDealerCards] = useState([])
     const [dealersFirstCard, setDealersFirstCard] = useState('')
     const [canPlayerSplit, setCanPlayerSplit] = useState(false)
+    const [wins, setWins] = useState({
+        player: 0,
+        dealer: 0,
+        draw: 0
+    })
 
     const playerTotal = totalHandValue(playerCards)
     const splitHandTotals = [totalHandValue(splitHand.hands[0]), totalHandValue(splitHand.hands[1])]
@@ -72,6 +77,8 @@ export const ContextProvider = ({ children }) => {
         dealCard,
         canPlayerSplit,
         setCanPlayerSplit,
+        wins,
+        setWins
     }
 
     return (

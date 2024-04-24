@@ -4,7 +4,7 @@ import { Image, Stack } from '@chakra-ui/react';
 import { BlackJackContext } from "../context/BlackJackContext";
 
 function DealerHand() {
-    const {setNewDeal, playerCards, playerTurn, splitHand, dealerCards, setDealerCards, setDealersFirstCard, dealerTotal, playerTotal, splitHandTotals, dealCard} = BlackJackContext();
+    const {setNewDeal, playerCards, playerTurn, setPlayerTurn, splitHand, dealerCards, setDealerCards, setDealersFirstCard, dealerTotal, playerTotal, splitHandTotals, dealCard, wins, setWins} = BlackJackContext();
 
     const dealerHandHidden = dealerCards
         ? dealerCards.map((card, index) => {
@@ -43,11 +43,12 @@ function DealerHand() {
                     // If player has 21, check if dealer has natural 21
                     if (dealerTotal === 21) {
                         console.log("Draw")
+                        setWins({...wins, draw: wins.draw+1})
                     } else {
                         console.log("PLAYER WINS!")
+                        setWins({...wins, player: wins.player+1})
                     }
                     setNewDeal(false)
-                    return
                 }
                 // else if (dealerTotal === 21) {
                 //     // If dealer has natural 21 and player does not, dealer wins
@@ -60,18 +61,23 @@ function DealerHand() {
                     dealerDraw()
                 } else {
                     if (dealerTotal <= 21) {
-                        if (dealerTotal > playerTotal) {
+                        if (dealerTotal > playerTotal || playerTotal > 21) {
                             console.log("Dealer Wins")
+                            setWins({...wins, dealer: wins.dealer+1})
                         } else if (dealerTotal === playerTotal) {
                             console.log("Draw")
+                            setWins({...wins, draw: wins.draw+1})
                         } else {
                             console.log("PLAYER WINS!")
+                            setWins({...wins, player: wins.player+1})
                         }
                     } else {
                         if (playerTotal <= 21) {
                             console.log("PLAYER WINS!")
+                            setWins({...wins, player: wins.player+1})
                         } else {
                             console.log("Dealer Wins")
+                            setWins({...wins, dealer: wins.dealer+1})
                         }
                     }
                     setNewDeal(false)
@@ -84,20 +90,26 @@ function DealerHand() {
                     } else {
                         for (let i=0; i < 2; i++) {
                             if (dealerTotal <= 21) {
-                                if (dealerTotal > splitHandTotals[i]) {
+                                if (dealerTotal > splitHandTotals[i] || splitHandTotals[i] > 21) {
                                     console.log(`Dealer Wins Against Split Hand #${i+1}`)
+                                    setWins({...wins, dealer: wins.dealer+1})
                                 } else if (dealerTotal === splitHandTotals[i]) {
                                     console.log(`Dealer Draw With Split Hand #${i+1}`)
+                                    setWins({...wins, draw: wins.draw+1})
+                                } else {
+                                    console.log(`PLAYER WINS WITH SPLIT HAND #${i+1}`)
+                                    setWins({...wins, player: wins.player+1})
                                 }
                             } else {
                                 if (splitHandTotals[i] <= 21) {
                                     console.log(`PLAYER WINS WITH SPLIT HAND #${i+1}`)
+                                    setWins({...wins, player: wins.player+1})
                                 } else {
                                     console.log(`Dealer Wins Against Split Hand #${i+1}`)
+                                    setWins({...wins, dealer: wins.dealer+1})
                                 }
                             }
                         }
-
                     }
                 } else {
                     console.log("Dealer Wins")
