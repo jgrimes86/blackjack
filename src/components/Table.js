@@ -3,12 +3,12 @@ import { Box, Button, Stack, Text } from '@chakra-ui/react';
 
 import DealerHand from "./DealerHand";
 import PlayerHand from "./PlayerHand";
-import PlayerSplitHand from "./PlayerSplitHand";
 import SplitHands from "./SplitHands";
 import { BlackJackContext } from "../context/BlackJackContext";
 
 function Table() {
     const {
+        deck,
         setDeck, 
         newDeal,
         setNewDeal, 
@@ -24,6 +24,37 @@ function Table() {
         dealCard
     } = BlackJackContext();
 
+    const shuffleDeck = async () => {
+        return fetch(`https://www.deckofcardsapi.com/api/deck/${deck.deck_id}/shuffle/`)
+        .then(resp => {
+            if (resp.ok) {
+                resp.json()
+                .then(data => setDeck(data))
+            }
+        })
+    }
+
+    const handleStartGame = async () => {
+        if (deck.remaining < 40) {
+            await shuffleDeck()
+            resetState()
+        } else {
+            resetState()
+        }
+    };
+    
+    const resetState = () => {
+        setSplitHand({
+            ...splitHand,
+            split: false
+        })
+        setPlayerCards(() => [])
+        setPlayerTurn(true)
+        setDealerCards(() => [])
+        setNewDeal(true)
+        firstDeal()
+    }
+    
     const firstDeal = async () => {
         const firstPlayerCard = await dealCard(1)
         if (firstPlayerCard.success) {
@@ -43,19 +74,6 @@ function Table() {
         }
     }
 
-    // start a new hand by drawing two cards for the player
-    const handleStartGame = async () => {
-        setSplitHand({
-            ...splitHand,
-            split: false
-        })
-        setPlayerCards(() => [])
-        setPlayerTurn(true)
-        setDealerCards(() => [])
-        setNewDeal(true)
-        firstDeal()
-    };
-  
     const playerArea = !splitHand.split
         ? <PlayerHand handleStartGame={handleStartGame} />
         : <SplitHands />;
@@ -76,6 +94,7 @@ function Table() {
 
     return (
         <div>
+            <Text>Blackjack</Text>
             <Text>Dealer Hand</Text>
             <DealerHand 
                 dealCard={dealCard}
@@ -85,7 +104,7 @@ function Table() {
             </Text>
             <Text>Player Hand</Text>
             {playerArea}
-            <Button onClick={handleStartGame} isDisabled={startButtonStatus} >Start Deal</Button>
+            {deck.success && <Button onClick={handleStartGame} isDisabled={startButtonStatus} >Start Deal</Button>}
         </div>
     )
 }
