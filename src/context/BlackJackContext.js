@@ -84,8 +84,6 @@ export const ContextProvider = ({ children }) => {
     const splitHandTotals = [totalHandValue(splitHand.hands[0]), totalHandValue(splitHand.hands[1])]
     const dealerTotal = totalHandValue(dealerCards)
 
-    console.log(splitHandTotals)
-
     const dealCard = async (draw) => {
         return fetch(`https://www.deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=${draw}`)
         .then(resp => resp.json())
