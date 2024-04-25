@@ -54,7 +54,12 @@ function DealerHand() {
                     // otherwise, draw new card if dealer total less than 17
                     dealerDraw()
                 } else {
-                    if (dealerTotal <= 21) {
+                    if (playerTotal > 21) {
+                        // if player busts, dealer wins
+                        console.log("Dealer Wins.")
+                        setWins({...wins, dealer: wins.dealer+1})
+                    }
+                    else if (dealerTotal <= 21) {
                         if (dealerTotal > playerTotal) {
                             // dealer wins with higher card total
                             console.log("Dealer Wins")
@@ -63,25 +68,15 @@ function DealerHand() {
                             // draw when card values are equal
                             console.log("Draw")
                             setWins({...wins, draw: wins.draw+1})
-                        } else if (playerTotal <= 21) {
+                        } else {
                             // player wins with higher card total
                             console.log("PLAYER WINS!")
                             setWins({...wins, player: wins.player+1})
-                        } else {
-                            // if player busts, dealer wins
-                            console.log("Dealer Wins.")
-                            setWins({...wins, dealer: wins.dealer+1})
                         }
                     } else {
-                        if (playerTotal <= 21) {
-                            // player wins if dealer busts and player doesn't
-                            console.log("PLAYER WINS!")
-                            setWins({...wins, player: wins.player+1})
-                        } else {
-                            // if player and dealer both bust, dealer wins
-                            console.log("Dealer Wins")
-                            setWins({...wins, dealer: wins.dealer+1})
-                        }
+                        // player wins if dealer busts and player doesn't
+                        console.log("PLAYER WINS!")
+                        setWins({...wins, player: wins.player+1})
                     }
                     setNewDeal(false)
                     setPlayerTurn(true)
@@ -91,38 +86,34 @@ function DealerHand() {
                 if (dealerTotal < 17) {
                     dealerDraw()
                 } else {
+                    let newWins = {...wins}
                     for (let i=0; i < 2; i++) {
                         // for each split hand
-                        if (dealerTotal <= 21) {
+                        if (splitHandTotals[i] > 21) {
+                            console.log(`Dealer Wins Against Split Hand #${i+1}`)
+                            newWins.dealer++
+                        } else if (dealerTotal <= 21) {
                             if (dealerTotal > splitHandTotals[i]) {
-                                // dealer wins against hand of lesser value
+                                // dealer wins against hand of lesser value or if split hand busts
                                 console.log(`Dealer Wins Against Split Hand #${i+1}`)
-                                setWins({...wins, dealer: wins.dealer+1})
+                                newWins.dealer++
                             } else if (dealerTotal === splitHandTotals[i]) {
                                 // draw if both hands equal
                                 console.log(`Dealer Draw With Split Hand #${i+1}`)
-                                setWins({...wins, draw: wins.draw+1})
-                            } else if (playerTotal <= 21) {
+                                newWins.draw++
+                            } else {
                                 // player wins split hand with higher hand total
                                 console.log(`PLAYER WINS WITH SPLIT HAND #${i+1}`)
-                                setWins({...wins, player: wins.player+1})
-                            } else {
-                                // if player hand busts, dealer wins
-                                console.log(`Dealer Wins Against Split Hand #${i+1}`)
-                                setWins({...wins, dealer: wins.dealer+1})
+                                newWins.player++
                             }
                         } else {
-                            if (splitHandTotals[i] <= 21) {
                                 // player hand wins if dealer busts and player doesn't
                                 console.log(`PLAYER WINS WITH SPLIT HAND #${i+1}`)
-                                setWins({...wins, player: wins.player+1})
-                            } else {
-                                // if player hand and dealer both bust, dealer wins
-                                console.log(`Dealer Wins Against Split Hand #${i+1}`)
-                                setWins({...wins, dealer: wins.dealer+1})
-                            }
+                                newWins.player++
+
                         }
                     }
+                    setWins(newWins)
                     setNewDeal(false)
                     setPlayerTurn(true)
                 }
