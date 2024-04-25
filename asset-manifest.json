@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/jgrimes86/blackjack/static/css/main.1d766016.css",
+    "main.js": "/jgrimes86/blackjack/static/js/main.e7d782d7.js",
+    "index.html": "/jgrimes86/blackjack/index.html",
+    "main.1d766016.css.map": "/jgrimes86/blackjack/static/css/main.1d766016.css.map",
+    "main.e7d782d7.js.map": "/jgrimes86/blackjack/static/js/main.e7d782d7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1d766016.css",
+    "static/js/main.e7d782d7.js"
+  ]
+}
