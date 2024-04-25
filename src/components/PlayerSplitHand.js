@@ -56,7 +56,6 @@ function PlayerSplitHand({ hand, index }) {
                 }
             }
         }
-
     }, [splitHand])
 
     return (

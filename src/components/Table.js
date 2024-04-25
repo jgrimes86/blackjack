@@ -48,8 +48,9 @@ function Table() {
     
     const resetState = () => {
         setSplitHand({
-            ...splitHand,
-            split: false
+            split: false,
+            splitHand: 0,
+            hands: []
         })
         setPlayerCards(() => [])
         setPlayerTurn(true)
