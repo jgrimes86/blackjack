@@ -16,6 +16,8 @@ function Table() {
         setPlayerCards, 
         playerTurn, 
         setPlayerTurn, 
+        dealerTurn,
+        setDealerTurn,
         splitHand, 
         setSplitHand, 
         setDealerCards, 
@@ -51,6 +53,7 @@ function Table() {
         })
         setPlayerCards(() => [])
         setPlayerTurn(true)
+        setDealerTurn(false)
         setDealerCards(() => [])
         setNewDeal(true)
         firstDeal()
@@ -102,7 +105,7 @@ function Table() {
                 dealCard={dealCard}
             />
             <Text>
-                {(playerTurn) ? dealersFirstCard: `Dealer card value: ${dealerTotal}`}
+                {dealerTurn ? `Dealer card value: ${dealerTotal}` : dealersFirstCard}
             </Text>
             <Text>Player Hand</Text>
             {playerArea}

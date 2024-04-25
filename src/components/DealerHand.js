@@ -4,7 +4,7 @@ import { Image, Stack } from '@chakra-ui/react';
 import { BlackJackContext } from "../context/BlackJackContext";
 
 function DealerHand() {
-    const {setNewDeal, playerCards, playerTurn, setPlayerTurn, splitHand, dealerCards, setDealerCards, setDealersFirstCard, dealerTotal, playerTotal, splitHandTotals, dealCard, wins, setWins} = BlackJackContext();
+    const {setNewDeal, playerCards, playerTurn, setPlayerTurn, dealerTurn, splitHand, dealerCards, setDealerCards, setDealersFirstCard, dealerTotal, playerTotal, splitHandTotals, dealCard, wins, setWins} = BlackJackContext();
 
     const dealerHandHidden = dealerCards
         ? dealerCards.map((card, index) => {
@@ -34,13 +34,12 @@ function DealerHand() {
         }
     }, [dealerCards])
 
-    // useEffect runs when player ends turn and when dealer draws cards
     useEffect(() => {
         if (!playerTurn && dealerCards) {
             if (!splitHand.split) {
                 // dealer logic for original (un-split) player hand
                 if (playerTotal === 21 && playerCards.length === 2) {
-                    // If player has 21, check if dealer has natural 21
+                    // If player has natural 21, check if dealer has natural 21
                     if (dealerTotal === 21) {
                         console.log("Draw")
                         setWins({...wins, draw: wins.draw+1})
@@ -49,72 +48,84 @@ function DealerHand() {
                         setWins({...wins, player: wins.player+1})
                     }
                     setNewDeal(false)
+                    setPlayerTurn(true)
                 }
-                // else if (dealerTotal === 21) {
-                //     // If dealer has natural 21 and player does not, dealer wins
-                //     console.log("Dealer Wins")
-                //     setNewDeal(false)
-                //     return
-                // } 
                 else if (dealerTotal < 17) {
                     // otherwise, draw new card if dealer total less than 17
                     dealerDraw()
                 } else {
                     if (dealerTotal <= 21) {
-                        if (dealerTotal > playerTotal || playerTotal > 21) {
+                        if (dealerTotal > playerTotal) {
+                            // dealer wins with higher card total
                             console.log("Dealer Wins")
                             setWins({...wins, dealer: wins.dealer+1})
                         } else if (dealerTotal === playerTotal) {
+                            // draw when card values are equal
                             console.log("Draw")
                             setWins({...wins, draw: wins.draw+1})
-                        } else {
+                        } else if (playerTotal <= 21) {
+                            // player wins with higher card total
                             console.log("PLAYER WINS!")
                             setWins({...wins, player: wins.player+1})
+                        } else {
+                            // if player busts, dealer wins
+                            console.log("Dealer Wins.")
+                            setWins({...wins, dealer: wins.dealer+1})
                         }
                     } else {
                         if (playerTotal <= 21) {
+                            // player wins if dealer busts and player doesn't
                             console.log("PLAYER WINS!")
                             setWins({...wins, player: wins.player+1})
                         } else {
+                            // if player and dealer both bust, dealer wins
                             console.log("Dealer Wins")
                             setWins({...wins, dealer: wins.dealer+1})
                         }
                     }
                     setNewDeal(false)
+                    setPlayerTurn(true)
                 }
             } else {
                 // dealer logic for split player hand
-                if (splitHandTotals[0] <= 21 || splitHandTotals[1] <= 21) {
-                    if (dealerTotal < 17) {
-                        dealerDraw()
-                    } else {
-                        for (let i=0; i < 2; i++) {
-                            if (dealerTotal <= 21) {
-                                if (dealerTotal > splitHandTotals[i] || splitHandTotals[i] > 21) {
-                                    console.log(`Dealer Wins Against Split Hand #${i+1}`)
-                                    setWins({...wins, dealer: wins.dealer+1})
-                                } else if (dealerTotal === splitHandTotals[i]) {
-                                    console.log(`Dealer Draw With Split Hand #${i+1}`)
-                                    setWins({...wins, draw: wins.draw+1})
-                                } else {
-                                    console.log(`PLAYER WINS WITH SPLIT HAND #${i+1}`)
-                                    setWins({...wins, player: wins.player+1})
-                                }
+                if (dealerTotal < 17) {
+                    dealerDraw()
+                } else {
+                    for (let i=0; i < 2; i++) {
+                        // for each split hand
+                        if (dealerTotal <= 21) {
+                            if (dealerTotal > splitHandTotals[i]) {
+                                // dealer wins against hand of lesser value
+                                console.log(`Dealer Wins Against Split Hand #${i+1}`)
+                                setWins({...wins, dealer: wins.dealer+1})
+                            } else if (dealerTotal === splitHandTotals[i]) {
+                                // draw if both hands equal
+                                console.log(`Dealer Draw With Split Hand #${i+1}`)
+                                setWins({...wins, draw: wins.draw+1})
+                            } else if (playerTotal <= 21) {
+                                // player wins split hand with higher hand total
+                                console.log(`PLAYER WINS WITH SPLIT HAND #${i+1}`)
+                                setWins({...wins, player: wins.player+1})
                             } else {
-                                if (splitHandTotals[i] <= 21) {
-                                    console.log(`PLAYER WINS WITH SPLIT HAND #${i+1}`)
-                                    setWins({...wins, player: wins.player+1})
-                                } else {
-                                    console.log(`Dealer Wins Against Split Hand #${i+1}`)
-                                    setWins({...wins, dealer: wins.dealer+1})
-                                }
+                                // if player hand busts, dealer wins
+                                console.log(`Dealer Wins Against Split Hand #${i+1}`)
+                                setWins({...wins, dealer: wins.dealer+1})
+                            }
+                        } else {
+                            if (splitHandTotals[i] <= 21) {
+                                // player hand wins if dealer busts and player doesn't
+                                console.log(`PLAYER WINS WITH SPLIT HAND #${i+1}`)
+                                setWins({...wins, player: wins.player+1})
+                            } else {
+                                // if player hand and dealer both bust, dealer wins
+                                console.log(`Dealer Wins Against Split Hand #${i+1}`)
+                                setWins({...wins, dealer: wins.dealer+1})
                             }
                         }
                     }
-                } else {
-                    console.log("Dealer Wins")
+                    setNewDeal(false)
+                    setPlayerTurn(true)
                 }
-                setNewDeal(false)
             }
         }
     }, [playerTurn, dealerCards])
@@ -122,7 +133,7 @@ function DealerHand() {
 
     return (
         <Stack direction='row' name='player hand'>
-            {playerTurn ? dealerHandHidden : dealerHandVisible}
+            {dealerTurn ? dealerHandVisible : dealerHandHidden}
         </Stack>
     )
 }

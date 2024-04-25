@@ -27,12 +27,45 @@ const splitTestCards = [
     }
 ]
 
+const naturalTestCards = [
+    {
+        "code": "JS",
+        "image": "https://deckofcardsapi.com/static/img/JS.png",
+        "images": {
+            "svg": "https://deckofcardsapi.com/static/img/JS.svg",
+            "png": "https://deckofcardsapi.com/static/img/JS.png"
+        },
+        "value": "JACK",
+        "suit": "SPADES"
+    },
+    {
+        "code": "AH",
+        "image": "https://deckofcardsapi.com/static/img/AH.png",
+        "images": {
+            "svg": "https://deckofcardsapi.com/static/img/AH.svg",
+            "png": "https://deckofcardsapi.com/static/img/AH.png"
+        },
+        "value": "ACE",
+        "suit": "HEARTS"
+    }
+]
+
 
 export const ContextProvider = ({ children }) => {
     const [deck, setDeck] = useState({deck_id: "", remaining: 0})
+
+    const [gameStatus, setGameStatus] = useState({
+        newDeal: false,
+        playerTurn: true,
+        canPlayerSplit: false,
+        dealerTurn: false,
+    })
     const [newDeal, setNewDeal] = useState(false)
-    const [playerCards, setPlayerCards] = useState([])
     const [playerTurn, setPlayerTurn] = useState(true)
+    const [canPlayerSplit, setCanPlayerSplit] = useState(false)
+    const [dealerTurn, setDealerTurn] = useState(false)
+
+    const [playerCards, setPlayerCards] = useState([])
     const [splitHand, setSplitHand] = useState({
         split: false,
         splitHand: 0,
@@ -40,7 +73,7 @@ export const ContextProvider = ({ children }) => {
     })
     const [dealerCards, setDealerCards] = useState([])
     const [dealersFirstCard, setDealersFirstCard] = useState('')
-    const [canPlayerSplit, setCanPlayerSplit] = useState(false)
+    
     const [wins, setWins] = useState({
         player: 0,
         dealer: 0,
@@ -65,6 +98,8 @@ export const ContextProvider = ({ children }) => {
         setPlayerCards,
         playerTurn,
         setPlayerTurn,
+        dealerTurn,
+        setDealerTurn,
         splitHand,
         setSplitHand,
         dealerCards,

@@ -4,7 +4,7 @@ import { Button, ButtonGroup, Image, Stack, Text } from '@chakra-ui/react';
 import { BlackJackContext } from '../context/BlackJackContext';
 
 function PlayerSplitHand({ hand, index }) {
-    const { newDeal, setNewDeal, playerCards, playerTurn, setPlayerTurn, splitHand, setSplitHand, canPlayerSplit, setCanPlayerSplit, playerTotal, splitHandTotals, dealCard } = BlackJackContext()
+    const { newDeal, setNewDeal, playerCards, playerTurn, setPlayerTurn, setDealerTurn, splitHand, setSplitHand, canPlayerSplit, setCanPlayerSplit, playerTotal, splitHandTotals, dealCard } = BlackJackContext()
 
     const cards = hand ? hand.map((card, index) => {
         return <Image key={index} src={card.image} alt={`${card.value} of ${card.suit}`} boxSize='200px'/>
@@ -25,6 +25,7 @@ function PlayerSplitHand({ hand, index }) {
         } else if (splitHand.splitHand === 1 && index === 1){
             // setNewDeal(false)
             setPlayerTurn(false)
+            setDealerTurn(true)
         }
     }
     
@@ -51,6 +52,7 @@ function PlayerSplitHand({ hand, index }) {
                 } else if (splitHand.splitHand === 1 && index === 1){
                     // setNewDeal(false)
                     setPlayerTurn(false)
+                    setDealerTurn(true)
                 }
             }
         }
